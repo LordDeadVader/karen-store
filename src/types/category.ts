@@ -2,7 +2,7 @@ export interface Category {
   id: string
   slug: string
   name: string
-  icon: string
+  image: string
   isActive: boolean
   order: number
 }

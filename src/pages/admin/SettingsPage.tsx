@@ -78,6 +78,9 @@ export function SettingsPage() {
 
         <section className="flex flex-col gap-4 rounded-2xl border border-ink-900/8 bg-white p-4">
           <h2 className="font-display text-lg font-semibold text-ink-900">Contato</h2>
+          <p className="-mt-2 rounded-xl bg-amber-50 p-3 text-xs text-amber-800">
+            Os dados abaixo são de exemplo. Atualize com as informações reais da loja antes de divulgar o site.
+          </p>
           <TextInput
             label="WhatsApp"
             hint="Apenas números, com DDD. Ex.: 11999999999"

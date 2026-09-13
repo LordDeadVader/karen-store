@@ -4,8 +4,6 @@ import { useStoreData } from '@/context/StoreDataContext'
 import { InstagramIcon, MapPinIcon, TikTokIcon, WhatsAppIcon } from '@/components/ui/icons'
 import { buildWhatsappLink, isWhatsappConfigured } from '@/services/whatsappService'
 
-const PLACEHOLDER = '[Configure no painel administrativo]'
-
 export function Footer() {
   const { settings, categories } = useStoreData()
 
@@ -27,7 +25,7 @@ export function Footer() {
                 <WhatsAppIcon width={18} height={18} />
               </a>
             )}
-            {settings.instagram !== PLACEHOLDER && (
+            {settings.instagram && (
               <a
                 href={settings.instagram}
                 target="_blank"
@@ -38,7 +36,7 @@ export function Footer() {
                 <InstagramIcon width={18} height={18} />
               </a>
             )}
-            {settings.tiktok !== PLACEHOLDER && (
+            {settings.tiktok && (
               <a
                 href={settings.tiktok}
                 target="_blank"
@@ -89,12 +87,14 @@ export function Footer() {
         <div>
           <p className="mb-3 text-xs font-bold tracking-wide text-ink-500 uppercase">Contato</p>
           <ul className="flex flex-col gap-2 text-sm text-ink-700">
-            <li>{settings.email !== PLACEHOLDER ? settings.email : <span className="text-ink-500 italic">E-mail: {PLACEHOLDER}</span>}</li>
-            <li className="flex items-start gap-1.5">
-              <MapPinIcon width={15} height={15} className="mt-0.5 shrink-0 text-ink-500" />
-              <span className={settings.address === PLACEHOLDER ? 'text-ink-500 italic' : ''}>{settings.address}</span>
-            </li>
-            <li className={settings.openingHours === PLACEHOLDER ? 'text-ink-500 italic' : ''}>{settings.openingHours}</li>
+            {settings.email && <li>{settings.email}</li>}
+            {settings.address && (
+              <li className="flex items-start gap-1.5">
+                <MapPinIcon width={15} height={15} className="mt-0.5 shrink-0 text-ink-500" />
+                <span>{settings.address}</span>
+              </li>
+            )}
+            {settings.openingHours && <li>{settings.openingHours}</li>}
           </ul>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { formatCurrency } from '@/utils/formatCurrency'
 import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { PageHeader } from '@/components/admin/PageHeader'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { PackageIcon } from '@/components/ui/icons'
 
 const STATUS_OPTIONS = Object.entries(ORDER_STATUS_LABELS) as [OrderStatus, string][]
 
@@ -34,7 +35,7 @@ export function OrdersPage() {
 
       {!isLoading && orders.length === 0 ? (
         <EmptyState
-          icon="📦"
+          icon={<PackageIcon width={22} height={22} />}
           title="Nenhum pedido ainda"
           description="Os pedidos feitos pelas clientes no checkout aparecerão aqui automaticamente."
         />

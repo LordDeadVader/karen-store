@@ -5,6 +5,7 @@ import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { ProductGrid } from '@/components/product/ProductGrid'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/Button'
+import { HeartIcon } from '@/components/ui/icons'
 
 export function FavoritesPage() {
   const { products, isLoading } = useStoreData()
@@ -21,7 +22,7 @@ export function FavoritesPage() {
 
       {favoriteProducts.length === 0 && !isLoading ? (
         <EmptyState
-          icon="💗"
+          icon={<HeartIcon width={22} height={22} />}
           title="Você ainda não tem favoritos"
           description="Toque no coração dos produtos que você amar para vê-los aqui."
           action={<Button onClick={() => navigate('/')}>Explorar produtos</Button>}

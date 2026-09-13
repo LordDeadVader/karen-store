@@ -16,7 +16,7 @@ export function CategoryStrip({ categories }: { categories: Category[] }) {
           )
         }
       >
-        ✨ Novidades
+        Novidades
       </NavLink>
       <NavLink
         to="/categoria/promocoes"
@@ -27,7 +27,7 @@ export function CategoryStrip({ categories }: { categories: Category[] }) {
           )
         }
       >
-        🏷️ Promoções
+        Promoções
       </NavLink>
       {active.map((category) => (
         <NavLink
@@ -40,7 +40,7 @@ export function CategoryStrip({ categories }: { categories: Category[] }) {
             )
           }
         >
-          {category.icon} {category.name}
+          {category.name}
         </NavLink>
       ))}
     </div>

@@ -3,6 +3,7 @@ import { Drawer } from '@/components/ui/Drawer'
 import { useStoreData } from '@/context/StoreDataContext'
 import { HeartIcon, HomeIcon, InstagramIcon, UserIcon, WhatsAppIcon } from '@/components/ui/icons'
 import { isWhatsappConfigured, buildWhatsappLink } from '@/services/whatsappService'
+import { ProductImage } from '@/components/product/ProductImage'
 
 export function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { categories, settings } = useStoreData()
@@ -27,7 +28,8 @@ export function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () =
               onClick={onClose}
               className="flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium text-ink-900 hover:bg-brand-50"
             >
-              <span>{category.icon}</span> {category.name}
+              <ProductImage src={category.image} alt="" className="h-8 w-8 shrink-0 rounded-lg" />
+              {category.name}
             </Link>
           ))}
 
@@ -42,7 +44,7 @@ export function MobileMenu({ isOpen, onClose }: { isOpen: boolean; onClose: () =
               <WhatsAppIcon width={20} height={20} /> Falar no WhatsApp
             </a>
           )}
-          {settings.instagram && settings.instagram !== '[Configure no painel administrativo]' && (
+          {settings.instagram && (
             <a
               href={settings.instagram}
               target="_blank"

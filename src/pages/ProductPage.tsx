@@ -18,7 +18,7 @@ import { AccordionItem } from '@/components/ui/Accordion'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { ProductGrid } from '@/components/product/ProductGrid'
 import { SectionHeader } from '@/components/home/SectionHeader'
-import { ArrowLeftIcon, CreditCardIcon, HeartIcon, MinusIcon, PlusIcon, ShieldCheckIcon, TruckIcon } from '@/components/ui/icons'
+import { AlertIcon, ArrowLeftIcon, CreditCardIcon, HeartIcon, MinusIcon, PlusIcon, ShieldCheckIcon, TruckIcon } from '@/components/ui/icons'
 
 export function ProductPage() {
   const { slug = '' } = useParams()
@@ -45,7 +45,7 @@ export function ProductPage() {
   if (!product) {
     return (
       <EmptyState
-        icon="🙈"
+        icon={<AlertIcon width={22} height={22} />}
         title="Produto não encontrado"
         description="Esse produto pode ter sido removido ou o link está incorreto."
         action={

@@ -1,9 +1,7 @@
 import { InstagramIcon } from '@/components/ui/icons'
 
-const PLACEHOLDER = '[Configure no painel administrativo]'
-
 export function InstagramTeaser({ instagram, storeName }: { instagram: string; storeName: string }) {
-  if (!instagram || instagram === PLACEHOLDER) return null
+  if (!instagram) return null
 
   return (
     <section className="px-4 py-8 md:px-6">
@@ -17,7 +15,7 @@ export function InstagramTeaser({ instagram, storeName }: { instagram: string; s
           <InstagramIcon width={24} height={24} />
         </div>
         <p className="font-display text-lg font-semibold text-ink-900">Siga a {storeName} no Instagram</p>
-        <p className="text-sm text-ink-700">Novidades, bastidores e promoções exclusivas por lá ✨</p>
+        <p className="text-sm text-ink-700">Novidades, bastidores e promoções exclusivas por lá</p>
       </a>
     </section>
   )

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useStoreData } from '@/context/StoreDataContext'
 import { categoriesService } from '@/services/categoriesService'
 import { slugify } from '@/services/productsService'
@@ -11,9 +11,10 @@ import { Button } from '@/components/ui/Button'
 import { Drawer } from '@/components/ui/Drawer'
 import { TextInput } from '@/components/ui/FormField'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { ProductImage } from '@/components/product/ProductImage'
 import { EditIcon, PlusIcon, TrashIcon } from '@/components/ui/icons'
 
-const EMPTY_FORM = { name: '', icon: '👗' }
+const EMPTY_FORM = { name: '', image: '' }
 
 export function CategoriesPage() {
   const { categories, refreshCategories } = useStoreData()
@@ -24,6 +25,7 @@ export function CategoriesPage() {
   const [editing, setEditing] = useState<Category | null>(null)
   const [form, setForm] = useState(EMPTY_FORM)
   const [deleteTarget, setDeleteTarget] = useState<Category | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   function openCreate() {
     setEditing(null)
@@ -33,8 +35,18 @@ export function CategoriesPage() {
 
   function openEdit(category: Category) {
     setEditing(category)
-    setForm({ name: category.name, icon: category.icon })
+    setForm({ name: category.name, image: category.image })
     setDrawerOpen(true)
+  }
+
+  function handleImageUpload(files: FileList | null) {
+    const file = files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = () => {
+      if (typeof reader.result === 'string') setForm((f) => ({ ...f, image: reader.result as string }))
+    }
+    reader.readAsDataURL(file)
   }
 
   async function handleSave() {
@@ -43,13 +55,13 @@ export function CategoriesPage() {
       return
     }
     if (editing) {
-      await categoriesService.update(editing.id, { name: form.name.trim(), icon: form.icon.trim() || '🛍️' })
+      await categoriesService.update(editing.id, { name: form.name.trim(), image: form.image })
       showToast('Categoria atualizada')
     } else {
       await categoriesService.create({
         name: form.name.trim(),
         slug: slugify(form.name),
-        icon: form.icon.trim() || '🛍️',
+        image: form.image,
         isActive: true,
         order: categories.length + 1,
       })
@@ -87,7 +99,7 @@ export function CategoriesPage() {
       <div className="flex flex-col gap-2">
         {categories.map((category) => (
           <div key={category.id} className="flex items-center gap-3 rounded-2xl border border-ink-900/8 bg-white p-3">
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-brand-50 text-xl">{category.icon}</span>
+            <ProductImage src={category.image} alt={category.name} className="h-14 w-11 shrink-0 rounded-xl" />
             <div className="flex-1">
               <p className="text-sm font-semibold text-ink-900">{category.name}</p>
               <p className="text-xs text-ink-500">/categoria/{category.slug}</p>
@@ -125,12 +137,18 @@ export function CategoriesPage() {
       >
         <div className="flex flex-col gap-4">
           <TextInput label="Nome da categoria" value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
-          <TextInput
-            label="Ícone (emoji)"
-            hint="Ex.: 👗 👚 👖 🎀"
-            value={form.icon}
-            onChange={(e) => setForm((f) => ({ ...f, icon: e.target.value }))}
-          />
+          <div>
+            <p className="mb-1.5 text-sm font-semibold text-ink-900">Foto da categoria</p>
+            {form.image && <ProductImage src={form.image} alt="Prévia" className="mb-2 aspect-[3/4] w-28 rounded-xl" />}
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="flex h-11 items-center justify-center gap-2 rounded-xl border border-dashed border-ink-900/20 px-4 text-sm font-semibold text-ink-700"
+            >
+              <PlusIcon width={16} height={16} /> Enviar foto
+            </button>
+            <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={(e) => handleImageUpload(e.target.files)} />
+          </div>
         </div>
       </Drawer>
 

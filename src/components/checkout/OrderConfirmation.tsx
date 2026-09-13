@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import type { Order } from '@/types'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { Button } from '@/components/ui/Button'
-import { WhatsAppIcon } from '@/components/ui/icons'
+import { CheckIcon, WhatsAppIcon } from '@/components/ui/icons'
 import { buildOrderSummaryMessage, buildWhatsappLink, isWhatsappConfigured } from '@/services/whatsappService'
 import { useStoreData } from '@/context/StoreDataContext'
 
@@ -24,7 +24,9 @@ export function OrderConfirmation({ order }: { order: Order }) {
 
   return (
     <div className="flex flex-col items-center gap-4 px-4 py-10 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-3xl">✅</div>
+      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+        <CheckIcon width={28} height={28} />
+      </div>
       <h1 className="font-display text-2xl font-bold text-ink-900">Pedido realizado!</h1>
       <p className="max-w-sm text-sm text-ink-500">
         Seu pedido <strong className="text-ink-900">{order.code}</strong> foi registrado. Total de{' '}

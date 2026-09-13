@@ -13,7 +13,7 @@ import { ReviewStep } from '@/components/checkout/ReviewStep'
 import { OrderConfirmation } from '@/components/checkout/OrderConfirmation'
 import { Button } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
-import { ArrowLeftIcon } from '@/components/ui/icons'
+import { ArrowLeftIcon, CartIcon } from '@/components/ui/icons'
 import { EMPTY_CHECKOUT_FORM, validateCustomer, validateDelivery, type CheckoutFormData } from '@/components/checkout/types'
 
 const STEPS = ['dados', 'entrega', 'pagamento', 'revisao'] as const
@@ -44,7 +44,7 @@ export function CheckoutPage() {
   if (items.length === 0) {
     return (
       <EmptyState
-        icon="🛍️"
+        icon={<CartIcon width={22} height={22} />}
         title="Seu carrinho está vazio"
         description="Adicione produtos ao carrinho antes de finalizar a compra."
         action={<Button onClick={() => navigate('/')}>Ir às compras</Button>}

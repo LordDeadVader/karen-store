@@ -12,7 +12,7 @@ import { ProductImage } from '@/components/product/ProductImage'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { Badge } from '@/components/ui/Badge'
 import { EmptyState } from '@/components/ui/EmptyState'
-import { CopyIcon, EditIcon, PlusIcon, SearchIcon, TrashIcon } from '@/components/ui/icons'
+import { CopyIcon, EditIcon, PackageIcon, PlusIcon, SearchIcon, TrashIcon } from '@/components/ui/icons'
 import { useToast } from '@/context/ToastContext'
 
 export function ProductsListPage() {
@@ -89,7 +89,7 @@ export function ProductsListPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <EmptyState icon="📦" title="Nenhum produto encontrado" description="Ajuste a busca ou cadastre um novo produto." />
+        <EmptyState icon={<PackageIcon width={22} height={22} />} title="Nenhum produto encontrado" description="Ajuste a busca ou cadastre um novo produto." />
       ) : (
         <div className="flex flex-col gap-3">
           {filtered.map((product) => {

@@ -2,6 +2,7 @@ import type { Product } from '@/types'
 import { ProductCard } from './ProductCard'
 import { ProductCardSkeleton } from '@/components/ui/Skeleton'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { SearchIcon } from '@/components/ui/icons'
 
 export function ProductGrid({
   products,
@@ -25,7 +26,7 @@ export function ProductGrid({
   }
 
   if (products.length === 0) {
-    return <EmptyState icon="🔍" title={emptyMessage} description={emptyDescription} />
+    return <EmptyState icon={<SearchIcon width={22} height={22} />} title={emptyMessage} description={emptyDescription} />
   }
 
   return (

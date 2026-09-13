@@ -9,7 +9,7 @@ import { CategoryStrip } from '@/components/home/CategoryStrip'
 import { FilterDrawer } from '@/components/filters/FilterDrawer'
 import { SortSelect } from '@/components/filters/SortSelect'
 import { Button } from '@/components/ui/Button'
-import { FilterIcon } from '@/components/ui/icons'
+import { AlertIcon, FilterIcon } from '@/components/ui/icons'
 import { EmptyState } from '@/components/ui/EmptyState'
 
 const VIRTUAL_CATEGORIES: Record<string, { name: string; description: string }> = {
@@ -46,7 +46,7 @@ export function CategoryPage() {
   if (!category && !virtual) {
     return (
       <EmptyState
-        icon="🙈"
+        icon={<AlertIcon width={22} height={22} />}
         title="Categoria não encontrada"
         description="Essa categoria pode ter sido removida ou renomeada."
       />

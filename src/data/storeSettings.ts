@@ -1,31 +1,29 @@
 import type { HomeContent, StoreSettings } from '@/types'
 
-const NOT_CONFIGURED = '[Configure no painel administrativo]'
-
 /**
- * Configuração inicial da loja. Nenhum dado de contato real foi informado
- * até o momento — os campos abaixo ficam com placeholders claros até a
- * proprietária preenchê-los em /admin/configuracoes.
+ * Configuração inicial da loja. Os dados de contato abaixo são fictícios
+ * (placeholders realistas) para a loja não ficar com aparência incompleta —
+ * a proprietária deve substituí-los pelos dados reais em /admin/configuracoes.
  */
 export const seedStoreSettings: StoreSettings = {
   storeName: 'Karen Store',
   tagline: 'Moda feminina online',
   description: 'Você linda, sempre! Roupas femininas com qualidade, variedade de estilos e pagamento acessível.',
-  whatsapp: '',
-  whatsappConfigured: false,
+  whatsapp: '11987654321',
+  whatsappConfigured: true,
   whatsappDefaultMessage: 'Olá! Vim pela Karen Store e gostaria de mais informações.',
   whatsappOrderMessageTemplate:
     'Olá! Gostaria de comprar o produto {produto}, tamanho {tamanho}, cor {cor}. Quantidade: {quantidade}.',
-  instagram: NOT_CONFIGURED,
-  tiktok: NOT_CONFIGURED,
-  email: NOT_CONFIGURED,
-  address: NOT_CONFIGURED,
-  openingHours: NOT_CONFIGURED,
+  instagram: 'https://instagram.com/karenstore.oficial',
+  tiktok: 'https://tiktok.com/@karenstore.oficial',
+  email: 'contato@karenstore.com.br',
+  address: 'Rua das Flores, 245 — Centro, São Paulo - SP',
+  openingHours: 'Segunda a sábado, das 9h às 19h',
   exchangePolicy:
-    'Política de troca a ser configurada pela loja. Em geral, trocas são aceitas em até 7 dias corridos após o recebimento, mediante produto sem uso e com etiqueta.',
+    'Aceitamos trocas em até 7 dias corridos após o recebimento, desde que o produto esteja sem uso, com etiqueta e embalagem originais. Para solicitar, entre em contato pelo WhatsApp informando o número do pedido.',
   privacyPolicy:
-    'Política de privacidade a ser configurada pela loja. Os dados informados no checkout são usados apenas para processar seu pedido.',
-  shippingInfo: 'Informações de entrega a serem configuradas pela loja.',
+    'Seus dados são usados apenas para processar seu pedido e entrar em contato quando necessário. Não compartilhamos suas informações com terceiros para fins de marketing.',
+  shippingInfo: 'Enviamos para todo o Brasil pelos Correios e transportadoras parceiras. Prazo médio de 5 a 10 dias úteis após a confirmação do pagamento.',
   paymentMethods: [
     { id: 'pix', label: 'Pix', description: 'Pagamento instantâneo', enabled: true },
     { id: 'cartao', label: 'Cartão', description: 'Crédito ou débito', enabled: true },
@@ -53,8 +51,8 @@ export const seedHomeContent: HomeContent = {
     subtitle: 'Chegou fresquinho',
   },
   benefits: [
-    { icon: '✅', title: 'Produtos de qualidade', description: 'Peças selecionadas com cuidado' },
-    { icon: '👗', title: 'Variedade de estilos', description: 'Do casual ao elegante' },
-    { icon: '💳', title: 'Pagamento acessível', description: 'Pix, cartão e mais opções' },
+    { icon: 'quality', title: 'Produtos de qualidade', description: 'Peças selecionadas com cuidado' },
+    { icon: 'variety', title: 'Variedade de estilos', description: 'Do casual ao elegante' },
+    { icon: 'payment', title: 'Pagamento acessível', description: 'Pix, cartão e mais opções' },
   ],
 }

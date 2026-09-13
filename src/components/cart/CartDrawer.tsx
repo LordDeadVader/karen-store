@@ -3,6 +3,7 @@ import { useCart } from '@/context/CartContext'
 import { Drawer } from '@/components/ui/Drawer'
 import { Button } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { CartIcon } from '@/components/ui/icons'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { CartItemRow } from './CartItemRow'
 
@@ -49,7 +50,7 @@ export function CartDrawer() {
     >
       {items.length === 0 ? (
         <EmptyState
-          icon="🛍️"
+          icon={<CartIcon width={22} height={22} />}
           title="Seu carrinho está vazio"
           description="Adicione peças que você ama e volte aqui para finalizar sua compra."
           action={

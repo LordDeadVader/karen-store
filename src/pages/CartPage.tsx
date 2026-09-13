@@ -4,6 +4,7 @@ import { useDocumentTitle } from '@/hooks/useDocumentTitle'
 import { CartItemRow } from '@/components/cart/CartItemRow'
 import { Button } from '@/components/ui/Button'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { CartIcon } from '@/components/ui/icons'
 import { formatCurrency } from '@/utils/formatCurrency'
 
 export function CartPage() {
@@ -18,7 +19,7 @@ export function CartPage() {
 
       {items.length === 0 ? (
         <EmptyState
-          icon="🛍️"
+          icon={<CartIcon width={24} height={24} />}
           title="Seu carrinho está vazio"
           description="Adicione peças que você ama e volte aqui para finalizar sua compra."
           action={<Button onClick={() => navigate('/')}>Continuar comprando</Button>}
