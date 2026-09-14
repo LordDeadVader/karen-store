@@ -4,7 +4,7 @@ import defaultLogo from '@/assets/brand/logo-karen-store.png'
 import { useStoreData } from '@/context/StoreDataContext'
 import { useCart } from '@/context/CartContext'
 import { IconButton } from '@/components/ui/IconButton'
-import { CartIcon, MenuIcon, SearchIcon } from '@/components/ui/icons'
+import { CartIcon, MenuIcon, SearchIcon, UserIcon } from '@/components/ui/icons'
 import { MobileMenu } from './MobileMenu'
 import { SearchOverlay } from '@/components/search/SearchOverlay'
 
@@ -52,6 +52,11 @@ export function Header() {
             <IconButton aria-label="Buscar" onClick={() => setSearchOpen(true)} className="lg:hidden">
               <SearchIcon />
             </IconButton>
+            <div className="hidden lg:block">
+              <IconButton aria-label="Minha conta" onClick={() => navigate('/conta')}>
+                <UserIcon />
+              </IconButton>
+            </div>
             <IconButton aria-label={`Carrinho, ${itemCount} ${itemCount === 1 ? 'item' : 'itens'}`} onClick={openDrawer} className="relative">
               <CartIcon />
               {itemCount > 0 && (
