@@ -26,12 +26,20 @@ export function readStorage<T>(key: string, fallback: T): T {
   }
 }
 
-export function writeStorage<T>(key: string, value: T): void {
-  if (typeof window === 'undefined') return
+/**
+ * Retorna `true` se a gravação foi bem-sucedida. Chamadores que não podem
+ * aceitar uma perda silenciosa de dados (ex.: salvar um produto) devem
+ * checar o retorno e avisar a pessoa usuária em vez de assumir sucesso —
+ * uma gravação pode falhar por cota excedida (localStorage geralmente tem
+ * 5–10MB por site) ou por modo privado/anônimo.
+ */
+export function writeStorage<T>(key: string, value: T): boolean {
+  if (typeof window === 'undefined') return false
   try {
     window.localStorage.setItem(buildKey(key), JSON.stringify(value))
+    return true
   } catch {
-    // Armazenamento indisponível (modo privado, cota excedida, etc.) — falha silenciosa.
+    return false
   }
 }
 

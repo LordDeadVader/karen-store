@@ -13,7 +13,10 @@ export const storeService = {
   async updateSettings(patch: Partial<StoreSettings>): Promise<StoreSettings> {
     const current = readStorage<StoreSettings>(SETTINGS_KEY, seedStoreSettings)
     const updated: StoreSettings = { ...current, ...patch }
-    writeStorage(SETTINGS_KEY, updated)
+    const ok = writeStorage(SETTINGS_KEY, updated)
+    if (!ok) {
+      throw new Error('Não foi possível salvar: o armazenamento do navegador está cheio. Tente usar uma foto menor para a logo.')
+    }
     return delay(updated)
   },
 

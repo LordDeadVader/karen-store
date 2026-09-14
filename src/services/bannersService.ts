@@ -9,7 +9,10 @@ function loadAll(): Banner[] {
 }
 
 function saveAll(banners: Banner[]): void {
-  writeStorage(KEY, banners)
+  const ok = writeStorage(KEY, banners)
+  if (!ok) {
+    throw new Error('Não foi possível salvar: o armazenamento do navegador está cheio. Tente usar uma foto menor.')
+  }
 }
 
 export const bannersService = {

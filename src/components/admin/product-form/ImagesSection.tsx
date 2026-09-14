@@ -3,6 +3,7 @@ import type { ProductFormState } from './types'
 import { ProductImage } from '@/components/product/ProductImage'
 import { ChevronLeftIcon, ChevronRightIcon, PlusIcon, TrashIcon } from '@/components/ui/icons'
 import { useToast } from '@/context/ToastContext'
+import { resizeImage } from '@/utils/resizeImage'
 
 export function ImagesSection({ form, onChange }: { form: ProductFormState; onChange: (patch: Partial<ProductFormState>) => void }) {
   const [urlInput, setUrlInput] = useState('')
@@ -25,15 +26,6 @@ export function ImagesSection({ form, onChange }: { form: ProductFormState; onCh
     onChange({ images: next })
   }
 
-  function readFileAsDataUrl(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.onload = () => resolve(reader.result as string)
-      reader.onerror = () => reject(reader.error)
-      reader.readAsDataURL(file)
-    })
-  }
-
   async function handleFiles(files: FileList | null) {
     if (!files) return
     const validFiles = Array.from(files).filter((file) => {
@@ -41,19 +33,23 @@ export function ImagesSection({ form, onChange }: { form: ProductFormState; onCh
         showToast('Selecione apenas arquivos de imagem', 'error')
         return false
       }
-      if (file.size > 3 * 1024 * 1024) {
-        showToast('Imagem muito grande (máx. 3MB)', 'error')
+      if (file.size > 15 * 1024 * 1024) {
+        showToast('Imagem muito grande (máx. 15MB)', 'error')
         return false
       }
       return true
     })
     if (validFiles.length === 0) return
-    // Lidas em paralelo e adicionadas em uma única atualização — chamar addImage
-    // por arquivo aqui causava condição de corrida: cada leitura assíncrona
-    // partia do mesmo form.images "congelado", e a última a terminar
-    // sobrescrevia as fotos adicionadas pelas anteriores.
-    const dataUrls = await Promise.all(validFiles.map(readFileAsDataUrl))
-    onChange({ images: [...form.images, ...dataUrls] })
+    // Redimensionadas em paralelo e adicionadas em uma única atualização —
+    // chamar addImage por arquivo aqui causava condição de corrida: cada
+    // leitura assíncrona partia do mesmo form.images "congelado", e a última
+    // a terminar sobrescrevia as fotos adicionadas pelas anteriores.
+    try {
+      const dataUrls = await Promise.all(validFiles.map((file) => resizeImage(file)))
+      onChange({ images: [...form.images, ...dataUrls] })
+    } catch {
+      showToast('Não foi possível processar uma das imagens', 'error')
+    }
   }
 
   return (

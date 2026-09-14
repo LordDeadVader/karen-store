@@ -9,7 +9,12 @@ function loadAll(): Product[] {
 }
 
 function saveAll(products: Product[]): void {
-  writeStorage(KEY, products)
+  const ok = writeStorage(KEY, products)
+  if (!ok) {
+    throw new Error(
+      'Não foi possível salvar: o armazenamento do navegador está cheio. Tente usar fotos menores ou remova alguma imagem.',
+    )
+  }
 }
 
 export function slugify(name: string): string {

@@ -10,6 +10,7 @@ import { TextInput, TextArea } from '@/components/ui/FormField'
 import { ToggleSwitch } from '@/components/admin/ToggleSwitch'
 import { PlusIcon } from '@/components/ui/icons'
 import type { HomeContent, StoreSettings } from '@/types'
+import { resizeImage } from '@/utils/resizeImage'
 
 export function SettingsPage() {
   const { settings, homeContent, refreshSettings, refreshHomeContent } = useStoreData()
@@ -30,14 +31,15 @@ export function SettingsPage() {
     setHome((prev) => ({ ...prev, ...patch }))
   }
 
-  function handleLogoUpload(files: FileList | null) {
+  async function handleLogoUpload(files: FileList | null) {
     const file = files?.[0]
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => {
-      if (typeof reader.result === 'string') updateForm({ logoOverride: reader.result })
+    try {
+      const dataUrl = await resizeImage(file, 600, 0.9, 'image/png')
+      updateForm({ logoOverride: dataUrl })
+    } catch {
+      showToast('Não foi possível processar essa imagem', 'error')
     }
-    reader.readAsDataURL(file)
   }
 
   async function handleSave() {
@@ -48,6 +50,8 @@ export function SettingsPage() {
       await refreshSettings()
       await refreshHomeContent()
       showToast('Configurações salvas')
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : 'Não foi possível salvar as configurações', 'error')
     } finally {
       setIsSaving(false)
     }

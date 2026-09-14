@@ -13,6 +13,7 @@ import { TextInput } from '@/components/ui/FormField'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { ProductImage } from '@/components/product/ProductImage'
 import { EditIcon, PlusIcon, TrashIcon } from '@/components/ui/icons'
+import { resizeImage } from '@/utils/resizeImage'
 
 const EMPTY_FORM = { name: '', image: '' }
 
@@ -39,14 +40,15 @@ export function CategoriesPage() {
     setDrawerOpen(true)
   }
 
-  function handleImageUpload(files: FileList | null) {
+  async function handleImageUpload(files: FileList | null) {
     const file = files?.[0]
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => {
-      if (typeof reader.result === 'string') setForm((f) => ({ ...f, image: reader.result as string }))
+    try {
+      const dataUrl = await resizeImage(file, 1000)
+      setForm((f) => ({ ...f, image: dataUrl }))
+    } catch {
+      showToast('Não foi possível processar essa imagem', 'error')
     }
-    reader.readAsDataURL(file)
   }
 
   async function handleSave() {
@@ -54,21 +56,25 @@ export function CategoriesPage() {
       showToast('Digite o nome da categoria', 'error')
       return
     }
-    if (editing) {
-      await categoriesService.update(editing.id, { name: form.name.trim(), image: form.image })
-      showToast('Categoria atualizada')
-    } else {
-      await categoriesService.create({
-        name: form.name.trim(),
-        slug: slugify(form.name),
-        image: form.image,
-        isActive: true,
-        order: categories.length + 1,
-      })
-      showToast('Categoria criada')
+    try {
+      if (editing) {
+        await categoriesService.update(editing.id, { name: form.name.trim(), image: form.image })
+        showToast('Categoria atualizada')
+      } else {
+        await categoriesService.create({
+          name: form.name.trim(),
+          slug: slugify(form.name),
+          image: form.image,
+          isActive: true,
+          order: categories.length + 1,
+        })
+        showToast('Categoria criada')
+      }
+      await refreshCategories()
+      setDrawerOpen(false)
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : 'Não foi possível salvar a categoria', 'error')
     }
-    await refreshCategories()
-    setDrawerOpen(false)
   }
 
   async function handleToggle(category: Category) {

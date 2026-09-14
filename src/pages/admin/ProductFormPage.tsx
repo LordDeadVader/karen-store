@@ -86,6 +86,8 @@ export function ProductFormPage() {
       }
       await refreshProducts()
       navigate('/admin/produtos')
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : 'Não foi possível salvar o produto', 'error')
     } finally {
       setIsSubmitting(false)
     }

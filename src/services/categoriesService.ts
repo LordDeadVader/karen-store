@@ -9,7 +9,10 @@ function loadAll(): Category[] {
 }
 
 function saveAll(categories: Category[]): void {
-  writeStorage(KEY, categories)
+  const ok = writeStorage(KEY, categories)
+  if (!ok) {
+    throw new Error('Não foi possível salvar: o armazenamento do navegador está cheio. Tente usar uma foto menor.')
+  }
 }
 
 export const categoriesService = {

@@ -12,6 +12,7 @@ import { TextInput } from '@/components/ui/FormField'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { ProductImage } from '@/components/product/ProductImage'
 import { ChevronDownIcon, EditIcon, PlusIcon, TrashIcon } from '@/components/ui/icons'
+import { resizeImage } from '@/utils/resizeImage'
 
 const EMPTY_FORM = { title: '', subtitle: '', image: '', buttonLabel: 'Ver mais', linkTo: '/' }
 
@@ -38,14 +39,15 @@ export function BannersPage() {
     setDrawerOpen(true)
   }
 
-  function handleFile(files: FileList | null) {
+  async function handleFile(files: FileList | null) {
     const file = files?.[0]
     if (!file) return
-    const reader = new FileReader()
-    reader.onload = () => {
-      if (typeof reader.result === 'string') setForm((f) => ({ ...f, image: reader.result as string }))
+    try {
+      const dataUrl = await resizeImage(file, 1600)
+      setForm((f) => ({ ...f, image: dataUrl }))
+    } catch {
+      showToast('Não foi possível processar essa imagem', 'error')
     }
-    reader.readAsDataURL(file)
   }
 
   async function handleSave() {
@@ -53,15 +55,19 @@ export function BannersPage() {
       showToast('Digite o título do banner', 'error')
       return
     }
-    if (editing) {
-      await bannersService.update(editing.id, form)
-      showToast('Banner atualizado')
-    } else {
-      await bannersService.create({ ...form, isActive: true, order: banners.length + 1 })
-      showToast('Banner criado')
+    try {
+      if (editing) {
+        await bannersService.update(editing.id, form)
+        showToast('Banner atualizado')
+      } else {
+        await bannersService.create({ ...form, isActive: true, order: banners.length + 1 })
+        showToast('Banner criado')
+      }
+      await refreshBanners()
+      setDrawerOpen(false)
+    } catch (error) {
+      showToast(error instanceof Error ? error.message : 'Não foi possível salvar o banner', 'error')
     }
-    await refreshBanners()
-    setDrawerOpen(false)
   }
 
   async function handleToggle(banner: Banner) {
