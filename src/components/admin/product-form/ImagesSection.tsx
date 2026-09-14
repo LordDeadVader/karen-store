@@ -25,23 +25,35 @@ export function ImagesSection({ form, onChange }: { form: ProductFormState; onCh
     onChange({ images: next })
   }
 
-  function handleFiles(files: FileList | null) {
+  function readFileAsDataUrl(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => resolve(reader.result as string)
+      reader.onerror = () => reject(reader.error)
+      reader.readAsDataURL(file)
+    })
+  }
+
+  async function handleFiles(files: FileList | null) {
     if (!files) return
-    Array.from(files).forEach((file) => {
+    const validFiles = Array.from(files).filter((file) => {
       if (!file.type.startsWith('image/')) {
         showToast('Selecione apenas arquivos de imagem', 'error')
-        return
+        return false
       }
       if (file.size > 3 * 1024 * 1024) {
         showToast('Imagem muito grande (máx. 3MB)', 'error')
-        return
+        return false
       }
-      const reader = new FileReader()
-      reader.onload = () => {
-        if (typeof reader.result === 'string') addImage(reader.result)
-      }
-      reader.readAsDataURL(file)
+      return true
     })
+    if (validFiles.length === 0) return
+    // Lidas em paralelo e adicionadas em uma única atualização — chamar addImage
+    // por arquivo aqui causava condição de corrida: cada leitura assíncrona
+    // partia do mesmo form.images "congelado", e a última a terminar
+    // sobrescrevia as fotos adicionadas pelas anteriores.
+    const dataUrls = await Promise.all(validFiles.map(readFileAsDataUrl))
+    onChange({ images: [...form.images, ...dataUrls] })
   }
 
   return (
